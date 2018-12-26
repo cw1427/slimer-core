@@ -64,12 +64,13 @@ class Provider implements ServiceProviderInterface
         //@codeCoverageIgnoreEnd
         
         $container['httpauth_middleware'] = function ($c) {
-            return new \Slim\Middleware\HttpBasicAuthentication([
-                "path"=> $c["config"]('suit.httpauth.path') ? $c["config"]("suit.httpauth.path") : ["/"],
-                "paththrough"=> $c["config"]('suit.httpauth.paththrough'),
+            $defaultParams=[
+                "path"=>["/"],
+                "paththrough"=> null,
                 "authenticator" =>  new \Slimer\Auth\MixDBLdapAuthenticator(["container"=>$c])
-            ]);
-            
+            ];
+            $defaultParams=array_merge($defaultParams,$c['config']('suit.httpauth'));
+            return new \Slim\Middleware\HttpBasicAuthentication($defaultParams);
         };
         
         //----PhpRbac
