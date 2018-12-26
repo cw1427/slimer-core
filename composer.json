@@ -1,5 +1,6 @@
 {
     "name": "slimer/slimer-core",
+    "version": "1.0.2",
     "description": "Sends your logs to files, sockets, inboxes, databases and various web services",
     "keywords": ["slim", "slimer", "mvc"],
     "homepage": "https://github.com/cw1427/Slimer",
