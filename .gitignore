@@ -17,3 +17,5 @@ Data/gerrit_id_rsa
 Data/gerrite_id_rsa
 app/Cache/*
 dist
+.gradle
+build

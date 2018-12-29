@@ -1,0 +1,78 @@
+// slimer-core package deliver
+
+apply plugin: 'java'
+apply plugin: 'groovy'
+
+buildscript {
+
+    repositories {
+    	google()
+        jcenter()
+        mavenCentral()
+    }
+    dependencies {
+    }
+
+}
+
+repositories {
+   google()
+   jcenter()
+   mavenCentral()
+}
+
+dependencies {
+}
+
+ext {
+	tagVersion = getVersion()
+}
+
+task pack(type: Zip){
+	print "-------start package"
+    archiveName = "$rootProject.name-${tagVersion}.zip"
+	destinationDir = file("$projectDir/dist")
+	from fileTree("$projectDir"){
+        exclude "gradle*"
+        exclude "dist"
+        exclude "build"
+        exclude ".*"
+        include "**/*"
+    }
+    doLast {
+    	push()
+    }
+}
+
+def push(){
+	//----check zip file exists
+	if (!file("$projectDir/dist/$rootProject.name-${tagVersion}.zip").exists()) {
+		throw new GradleException('There is no zip file generated.')
+	}
+	//----upload the zip 
+	def stdout = new ByteArrayOutputStream()
+    exec {
+        commandLine 'curl', '-u', "${pushName}:${pushPassword}" ,'-k', "${pushUrl}/$rootProject.name-${tagVersion}.zip", '-T', "$projectDir/dist/$rootProject.name-${tagVersion}.zip"
+        standardOutput = stdout
+    }
+    print stdout.toString().trim()
+}
+
+def getVersion(){
+    Properties version = new Properties()
+    File pf = new File(rootProject.getRootDir().getAbsolutePath()+'/version.ini')
+    pf.withInputStream {
+       version.load(it)
+    }
+    return String.format("%s.%s.%s",version.get('VERSION_MAJOR'),version.get('VERSION_MINOR'),version.get('VERSION_BUILD'))
+}
+
+def commitID() {
+    def stdout = new ByteArrayOutputStream()
+    exec {
+        //commandLine 'git', 'show', '-s', '--pretty=oneline'
+        commandLine 'git', 'rev-parse', '--short', 'HEAD'
+        standardOutput = stdout
+    }
+    return stdout.toString().trim()
+}
