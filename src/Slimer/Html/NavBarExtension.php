@@ -9,11 +9,11 @@ use Psr\Http\Message\ServerRequestInterface;
 use Pimple\Container;
 
 /**
- * slim/sidebar extension 
+ * slim/sidebar extension
  *
  * @author slim
  *
- * @see 
+ * @see
  */
 class NavBarExtension extends \Twig\Extension\AbstractExtension implements \Twig\Extension\GlobalsInterface
 {
@@ -31,7 +31,7 @@ class NavBarExtension extends \Twig\Extension\AbstractExtension implements \Twig
         $this->container = $container;
     }
     
-
+    
     /**
      * @return array
      */
@@ -58,12 +58,17 @@ class NavBarExtension extends \Twig\Extension\AbstractExtension implements \Twig
                 [$this, 'AvatarFunction'],
                 ['is_safe' => ['html'], 'needs_environment' => true]
                 ),
+            new \Twig_SimpleFunction(
+                'nav_bar_actions',
+                [$this, 'ActionsFunction'],
+                ['is_safe' => ['html'], 'needs_environment' => true]
+                ),
         ];
     }
     
     public function NotificationsFunction(\Twig_Environment $environment)
     {
-        if (!$this->container->has('notices')) {
+        if (!$this->container->has('notices') || $this->container->get('notices') == null) {
             return "";
         }
         
@@ -76,13 +81,25 @@ class NavBarExtension extends \Twig\Extension\AbstractExtension implements \Twig
     public function TasksFunction(\Twig_Environment $environment)
     {
         
-        if ($this->container->has('tasks') == null) {
+        if (!$this->container->has('notices') || $this->container->get('notices') == null) {
             return "";
         }
         
         return $environment->render('adminlte/navBar/tasks.html.twig', [
             'tasks' => $this->container['tasks'],
             'total' => sizeof($this->container['tasks'])
+        ]);
+    }
+    
+    public function ActionsFunction(\Twig_Environment $environment)
+    {
+        if (!$this->container->has('actions') || $this->container->get('actions') == null) {
+            return "";
+        }
+        
+        return $environment->render('adminlte/navBar/actions.html.twig', [
+            'actions' => $this->container['actions'],
+            'total'         => sizeof($this->container['actions'])
         ]);
     }
     
@@ -111,7 +128,7 @@ class NavBarExtension extends \Twig\Extension\AbstractExtension implements \Twig
             'alt'   => $alt,
         ]);
     }
-  
+    
     
     
     /**

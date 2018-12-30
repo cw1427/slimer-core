@@ -9,11 +9,11 @@ use Psr\Http\Message\ServerRequestInterface;
 use Pimple\Container;
 
 /**
- * slim/sidebar extension 
+ * slim/sidebar extension
  *
  * @author slim
  *
- * @see 
+ * @see
  */
 class SideBarExtension extends \Twig\Extension\AbstractExtension implements \Twig\Extension\GlobalsInterface
 {
@@ -31,7 +31,7 @@ class SideBarExtension extends \Twig\Extension\AbstractExtension implements \Twi
         $this->container = $container;
     }
     
-
+    
     /**
      * @return array
      */
@@ -54,7 +54,7 @@ class SideBarExtension extends \Twig\Extension\AbstractExtension implements \Twi
                 ['is_safe' => ['html'], 'needs_environment' => false]
                 ),
             new \Twig_SimpleFunction(
-                 'isSubMenuActive',
+                'isSubMenuActive',
                 [$this, 'isSubMenuActive'],
                 ['is_safe' => ['html'], 'needs_environment' => true]
                 ),
@@ -67,7 +67,17 @@ class SideBarExtension extends \Twig\Extension\AbstractExtension implements \Twi
                 'getCommitId',
                 [$this, 'getCommitId'],
                 ['is_safe' => ['html'], 'needs_environment' => false]
-                )
+                ),
+            new \Twig_SimpleFunction(
+                'isNeedIntro',
+                [$this, 'isNeedIntro'],
+                ['is_safe' => ['html'], 'needs_environment' => true]
+                ),
+            new \Twig_SimpleFunction(
+                'getIntroduction',
+                [$this, 'getIntroduction'],
+                ['is_safe' => ['html'], 'needs_environment' => true]
+                ),
             
         ];
     }
@@ -108,7 +118,7 @@ class SideBarExtension extends \Twig\Extension\AbstractExtension implements \Twi
     public function ToggleButtonFunction(\Twig_Environment $environment)
     {
         /** @var RoutingExtension $routing */
-        $template = '<a href="#" class="sidebar-toggle" data-toggle="push-menu"><span class="sr-only">Toggle navigation</span></a>';
+        $template = '<a href="#" class="sidebar-toggle" data-toggle="push-menu" {{menuToggleIntro|raw}}><span class="sr-only">Toggle navigation</span></a>';
         
         try {
             $url = $this->container['router']->pathFor('sbs_adminlte_sidebar_collapse');
@@ -119,7 +129,7 @@ class SideBarExtension extends \Twig\Extension\AbstractExtension implements \Twi
                             event.preventDefault();
                             $.post("{{ url }}", {collapse: $("body").hasClass("sidebar-collapse")} );
                         });
-                    });</script>')->render(['url' => $url]);
+                    });</script>')->render(['url' => $url,'menuToggleIntro'=>$this->getIntroduction($environment, 'menuToggleButton')]);
         } catch (\Exception $e) {
             return $template;
         }
@@ -137,7 +147,7 @@ class SideBarExtension extends \Twig\Extension\AbstractExtension implements \Twi
                     return true;
                 }
             }
-
+            
         }
         return false;
     }
@@ -153,8 +163,30 @@ class SideBarExtension extends \Twig\Extension\AbstractExtension implements \Twi
         $key=$this->container['config']('suit.commitid_key') ? $this->container['config']('suit.commitid_key') : "COMMITID";
         return getenv($key) ?  getenv($key) : null;
     }
-
-
+    
+    public function isNeedIntro(\Twig_Environment $environment)
+    {
+        $currentUser = $this->container['session']->get('user');
+        if ($currentUser == null || $this->container['config']('suit.intro_date') == null ) return false;
+        if ($this->container['session']->get('introed') != null) return !$this->container['session']->get('introed');
+        if ($currentUser['lastLogin'] !=null && (strtotime($currentUser['lastLogin'])<= strtotime($this->container['config']('suit.intro_date')))){
+            return true;
+        }
+        return false;
+    }
+    
+    public function getIntroduction(\Twig_Environment $environment, $introductionKey)
+    {
+        $introductions = $this->container['config']('suit.introductions');
+        if ($introductions == null) return null;
+        $out=[];
+        foreach ($introductions[$introductionKey] as $k=>$v){
+            array_push($out, "{$k}=\"{$v}\"");
+        }
+        return implode(" ", $out);
+    }
+    
+    
     /**
      * {@inheritdoc}
      */

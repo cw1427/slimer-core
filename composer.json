@@ -1,7 +1,7 @@
 {
     "name": "slimer/slimer-core",
-    "version": "1.0.4",
-    "description": "Sends your logs to files, sockets, inboxes, databases and various web services",
+    "version": "1.0.3",
+    "description": "Slimer sketon framework fundamental library slimer-core",
     "keywords": ["slim", "slimer", "mvc"],
     "homepage": "https://github.com/cw1427/Slimer",
     "type": "library",

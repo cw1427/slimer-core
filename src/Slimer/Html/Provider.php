@@ -47,5 +47,18 @@ class Provider implements ServiceProviderInterface
             $view->addExtension(new \Slimer\Html\NavBarExtension($container));
             return $view;
         };
+        
+        //----add tasks configs into C
+        $container['tasks'] = function (Container $container) {
+            return $container['config']('suit.tasks');
+        };
+        //----add notices configs into C
+        $container['notices'] = function (Container $container) {
+            return $container['config']('suit.notices');
+        };
+        $container['actions'] = function (Container $container) {
+            return $container['config']('suit.actions');
+        };
+        
     }
 }
