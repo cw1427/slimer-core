@@ -1,3 +1,5 @@
+### 1.0.4 (2018-12-30)
+  -- Add tasks,notice,actions config support.
 ### 1.0.3 (2018-12-26)
   -- Test for deploy into local composer registry.
 ### 1.0.2 (2018-12-26)
