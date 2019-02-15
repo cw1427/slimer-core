@@ -1,3 +1,7 @@
+### 1.0.8 (2019-5-20)
+  -- Add menu isActive fit for recusion case more than 2 level menu.
+### 1.0.6 (2018-12-30)
+  -- Add isMenuVisible feature to hide menu by permission
 ### 1.0.5 (2019-02-15)
   -- Fix some bug and add isMenuVisible twig extension function to bring menu hidden by permission.
 ### 1.0.4 (2018-12-30)
