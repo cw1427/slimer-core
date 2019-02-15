@@ -78,7 +78,11 @@ class SideBarExtension extends \Twig\Extension\AbstractExtension implements \Twi
                 [$this, 'getIntroduction'],
                 ['is_safe' => ['html'], 'needs_environment' => true]
                 ),
-            
+            new \Twig_SimpleFunction(
+                'isMenuVisible',
+                [$this, 'isMenuVisible'],
+                ['is_safe' => ['html'], 'needs_environment' => true]
+                ),
         ];
     }
     
@@ -184,6 +188,57 @@ class SideBarExtension extends \Twig\Extension\AbstractExtension implements \Twi
             array_push($out, "{$k}=\"{$v}\"");
         }
         return implode(" ", $out);
+    }
+    
+    
+    public function isMenuVisible(\Twig_Environment $environment,$item)
+    {
+        $menuVisibleByPerm = $this->container['config']('suit.menu_visible_by_perm');
+        if (!isset($menuVisibleByPerm) || (isset($menuVisibleByPerm) && ($menuVisibleByPerm == false))) {
+            return true;
+        }
+        //----check menu item route perm
+        $routeName = isset($item['routeName']) ? $item['routeName'] : $item['route'];
+        if ($routeName && $routeName != ''){
+            if (strpos($routeName, "/") >= 0){
+                $routeName = trim($routeName,"/");
+                $routeName = str_replace("/", "-", $routeName);
+            }
+            $routes = \explode("-", $routeName);
+            $routeConf = $this->container['config']('routes')['/'.$routes[0]][\end($routes)];
+            if ($routeConf != null){
+                if (isset($routeConf['perm'])){
+                    $permGroup = $this->container['user']->get('perm_group');
+                    if (isset($permGroup) && $permGroup != null){
+                        $permGroupIds = [];
+                        foreach ($permGroup as $group){
+                            \array_push($permGroupIds,$group['ID']);
+                        }
+                        foreach ($routeConf['perm'] as $perm){
+                            if ($this->container['rbac']->check($perm,$permGroupIds)){
+                                return true;
+                            }
+                        }
+                    }
+                    return false;
+                }else{
+                    return true;
+                }
+            }else{
+                return true;
+            }
+        }else if(isset($item['children'])){
+            //----check children
+            foreach ($item['children'] as $child){
+                $childVisible = $this->isMenuVisible($environment,$child);
+                if ($childVisible){
+                    return true;
+                }
+            }
+            return false;
+        }else{
+            return true;
+        }
     }
     
     

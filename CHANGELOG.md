@@ -1,3 +1,5 @@
+### 1.0.5 (2019-02-15)
+  -- Fix some bug and add isMenuVisible twig extension function to bring menu hidden by permission.
 ### 1.0.4 (2018-12-30)
   -- Add tasks,notice,actions config support.
 ### 1.0.3 (2018-12-26)
