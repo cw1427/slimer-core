@@ -33,9 +33,22 @@ class RBAC extends Root
         $rns = \explode('-',$routeName);
         $routeName=\end($rns);
         $routeConf = $this->config('routes')['/'.$groupName][$routeName];
+        $user = $this->user;
+        if (isset($user)){
+            $permGroup=$user->getUserGroups();
+            if ($permGroup != $user->get('perm_group')){
+                $user->set('perm_group',$permGroup);
+                $permGroupIds = [];
+                foreach ($permGroup as $g){
+                    \array_push($permGroupIds,$g['ID']);
+                }
+                $rs = $user->getUserRoles($permGroupIds);
+                $user->set('roles',$rs);
+                $this->session->set('user',$user->getData());
+            }
+        }
         if (isset($routeConf['perm'])){
             $request=$request->withAttribute('perm',$routeConf['perm']);
-            $permGroup = $this->user->get('perm_group');
             if (isset($permGroup) && $permGroup != null){
                 $permGroupIds = [];
                 foreach ($permGroup as $group){
