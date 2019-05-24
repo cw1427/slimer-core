@@ -142,22 +142,26 @@ class SideBarExtension extends \Twig\Extension\AbstractExtension implements \Twi
     
     public function isSubMenuActive(\Twig_Environment $environment, $children, $current_route)
     {
+        $isActive = false;
         if ($children != null and sizeof($children)>0){
             foreach($children as $m){
                 // recursion the sub menu to define it active.
                 if (isset($m['children'])){
-                    return $this->isSubMenuActive($environment,$m['children'],$current_route);
+                    $isActive =  $this->isSubMenuActive($environment,$m['children'],$current_route);
+                    if ($isActive) break;
                 }else{
                     if (isset($m['route']) && strpos($m['route'],$current_route)){
-                        return true;
+                        $isActive = true;
+                        break;
                     }
                     if (isset($m['routeName']) && strpos($m['routeName'],$current_route)){
-                        return true;
+                        $isActive = true;
+                        break;
                     }
                 }
             }
         }
-        return false;
+        return $isActive;
     }
     
     public function getVersion()

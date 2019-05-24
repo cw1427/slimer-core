@@ -1,4 +1,6 @@
-### 1.0.8 (2019-5-20)
+### 1.0.8 (2019-5-24)
+  -- Bug fix for the recrision meuc isSubMenuActive checking logic wrong.
+### 1.0.7 (2019-5-20)
   -- Add menu isActive fit for recusion case more than 2 level menu.
 ### 1.0.6 (2018-12-30)
   -- Add isMenuVisible feature to hide menu by permission
