@@ -1,3 +1,5 @@
+### 1.1.0 (2019-7-12)
+  -- Adjust some model level compatibilty for sqlite and adjust the menu visubile support for default Index controller.
 ### 1.0.8 (2019-5-24)
   -- Bug fix for the recrision meuc isSubMenuActive checking logic wrong.
 ### 1.0.7 (2019-5-20)

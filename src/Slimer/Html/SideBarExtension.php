@@ -213,7 +213,13 @@ class SideBarExtension extends \Twig\Extension\AbstractExtension implements \Twi
                 $routeName = str_replace("/", "-", $routeName);
             }
             $routes = \explode("-", $routeName);
-            $routeConf = $this->container['config']('routes')['/'.$routes[0]][\end($routes)];
+            // bug fix, compatiable for index router
+            if (sizeof($routes)==1){
+                // default '/' route
+                $routeConf = $this->container['config']('routes')['/'][\end($routes)];
+            }else{
+                $routeConf = $this->container['config']('routes')['/'.$routes[0]][\end($routes)];
+            }
             if ($routeConf != null){
                 if (isset($routeConf['perm'])){
                     $permGroup = $this->container['user']->get('perm_group');

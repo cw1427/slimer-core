@@ -23,7 +23,13 @@ class Rbac extends PhpRbac
         $user = $this->container['config']('db.default.username');
         $pass = $this->container['config']('db.default.password');
         $dbname = $this->container['config']('db.default.database_name');
-        $adapter="pdo_mysql";
+        if ($this->container['config']('db.default.database_type') == 'mysql'){
+            $adapter="pdo_mysql";
+        }else if($this->container['config']('db.default.database_type') == 'sqlite'){
+            $adapter="pdo_sqlite";
+        }else {
+            $adapter=null;
+        }
         $tablePrefix = $this->container['config']('rbac.rbac_table_prefix') ? $this->container['config']('rbac.rbac_table_prefix') : 'PREFIX_';
       
         require_once APP_ROOT . DS . 'vendor/owasp/phprbac/PhpRbac/src/PhpRbac/core/lib/Jf.php';
