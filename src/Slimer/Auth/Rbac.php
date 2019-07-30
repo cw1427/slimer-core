@@ -141,11 +141,20 @@ class Rbac extends PhpRbac
      * show the whole hierarchical tree in the console
      */
     private function _showTree(){
+        if ($this->isSQLite())
+        {
+            $Query=" SELECT ( replace(substr(quote(zeroblob((COUNT(parent.Title) - 1 + 1) / 2)), 3, COUNT(parent.Title) - 1), '0', '-') || node.Title) as name, (COUNT(parent.Title) - 1) as depth from {$this->table()} as node, {$this->table()} as parent
+                    where node.{$this->left()} between parent.{$this->left()} and parent.{$this->right()}
+                    group by node.{$this->id()}
+                    order by node.{$this->left()}
+                ";
+        }else{
         $Query=" SELECT CONCAT( REPEAT('-', COUNT(parent.Title) - 1), node.Title) as name, (COUNT(parent.Title) - 1) as depth from {$this->table()} as node, {$this->table()} as parent
                     where node.{$this->left()} between parent.{$this->left()} and parent.{$this->right()} 
                     group by node.{$this->id()}
                     order by node.{$this->left()}
                 ";
+        }
         return JF::sql( $Query );
     }
     

@@ -1,3 +1,5 @@
+### 1.1.1 (2019-7-30)
+  -- Adjust rbacmanager command compatability for sqlite db.
 ### 1.1.0 (2019-7-12)
   -- Adjust some model level compatibilty for sqlite and adjust the menu visubile support for default Index controller.
 ### 1.0.8 (2019-5-24)
