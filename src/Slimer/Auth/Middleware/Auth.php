@@ -40,8 +40,7 @@ class Auth extends Root
         if ($this->container->has("basicAuth") || ($this->container->has('user') && $this->container->get('user'))){
             return $next($request, $response);
         }else{
-            $this->container['flash']->addMessage('danger','Require login');
-            return $this->response->withRedirect('/login');
+            return $this->response->withRedirect("/login?to={$route->getName()}");
         }
         
     }

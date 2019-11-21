@@ -1,5 +1,9 @@
 # Slimer-core : Slimer framework basic core library
 
+## Release history
+
+- v1.1.2 add auth middlewoare jump to next route name to allow jump to feature.
+
 It works with Slimer framework. Please refer skeleton framework: https://github.com/cw1427/Slimer
 
 ## Installation
