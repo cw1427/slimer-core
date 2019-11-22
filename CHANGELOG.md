@@ -1,3 +1,5 @@
+### 1.1.3 (2019-11-22)
+  -- Bug fix for intro feature when first login not showing.
 ### 1.1.1 (2019-7-30)
   -- Adjust rbacmanager command compatability for sqlite db.
 ### 1.1.0 (2019-7-12)

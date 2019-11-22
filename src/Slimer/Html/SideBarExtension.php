@@ -181,7 +181,7 @@ class SideBarExtension extends \Twig\Extension\AbstractExtension implements \Twi
         $currentUser = $this->container['session']->get('user');
         if ($currentUser == null || $this->container['config']('suit.intro_date') == null ) return false;
         if ($this->container['session']->get('introed') !== null) return !$this->container['session']->get('introed');
-        if ($currentUser['lastLogin'] !=null && (strtotime($currentUser['lastLogin'])<= strtotime($this->container['config']('suit.intro_date')))){
+        if ($currentUser['lastLogin'] ==null || ($currentUser['lastLogin'] !=null && (strtotime($currentUser['lastLogin'])<= strtotime($this->container['config']('suit.intro_date'))))){
             return true;
         }
         return false;
