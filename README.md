@@ -1,6 +1,7 @@
 # Slimer-core : Slimer framework basic core library
 
 ## Release history
+- v1.1.4 Add jump to with parameter case support.
 - v1.1.3 Bug fix for intro feature would miss render when first login.
 - v1.1.2 add auth middlewoare jump to next route name to allow jump to feature.
 

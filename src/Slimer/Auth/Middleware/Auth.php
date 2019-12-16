@@ -40,7 +40,8 @@ class Auth extends Root
         if ($this->container->has("basicAuth") || ($this->container->has('user') && $this->container->get('user'))){
             return $next($request, $response);
         }else{
-            return $this->response->withRedirect("/login?to={$route->getName()}");
+            $querys=  ($route->getArguments()!=null) ? \http_build_query($route->getArguments()) : null;
+            return $this->response->withRedirect("/login?to={$route->getName()}&{$querys}");
         }
         
     }

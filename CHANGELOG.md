@@ -1,3 +1,5 @@
+### 1.1.4 (2019-12-16)
+  -- Add jump to with parameter case support.
 ### 1.1.3 (2019-11-22)
   -- Bug fix for intro feature when first login not showing.
 ### 1.1.1 (2019-7-30)
