@@ -229,8 +229,12 @@ class SideBarExtension extends \Twig\Extension\AbstractExtension implements \Twi
                             \array_push($permGroupIds,$group['ID']);
                         }
                         foreach ($routeConf['perm'] as $perm){
-                            if ($this->container['rbac']->check($perm,$permGroupIds)){
-                                return true;
+                            try{
+                                if ($this->container['rbac']->check($perm,$permGroupIds)){
+                                    return true;
+                                }
+                            } catch (\RbacPermissionNotFoundException $e){
+                                $this->container['logger']->error("Permission {$perm} not found error");
                             }
                         }
                     }

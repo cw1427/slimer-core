@@ -1,3 +1,5 @@
+### 1.1.5 (2020-02-20)
+  -- Add Add RbacPermissionNotFoundException catch in SideBarExtension::isMenuVisible function.
 ### 1.1.4 (2019-12-16)
   -- Add jump to with parameter case support.
 ### 1.1.3 (2019-11-22)
