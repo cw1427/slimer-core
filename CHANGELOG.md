@@ -1,3 +1,5 @@
+### 1.1.6 (2020-03-19)
+  -- Add route middleware feature.
 ### 1.1.5 (2020-02-20)
   -- Add Add RbacPermissionNotFoundException catch in SideBarExtension::isMenuVisible function.
 ### 1.1.4 (2019-12-16)

@@ -23,15 +23,16 @@ class Router extends \Slimer\Root
         foreach ($this->config('routes') as $group => $routes) {
             //----support for route prefix by -  e.g.  api-cmd  the api is the route prefix
             if (\strpos($group,'-') > 0) {
-	        $gs = \explode('-',$group);
+                $gs = \explode('-',$group);
                 $group_name = \end($gs);
                 $group = \str_replace('-','/',$group);
             }else{
                 $group_name = $group;
             }
-            $app->group($group, function () use ($group_name, $routes){
+            $container = $this->container;
+            $app->group($group, function () use ($group_name, $routes,$container){
                 $controller = ('/' === $group_name || !$group_name) ? 'index' : \trim($group_name, '/');
-                
+
                 foreach ($routes as $name => $route) {
                     $methods = isset($route['methods']) ? $route['methods'] : ['GET'];
                     $pattern = isset($route['pattern']) ? $route['pattern'] : '';
@@ -43,7 +44,14 @@ class Router extends \Slimer\Root
                             return $this['controller']($controller)->__invoke($request, $response, $args);
                         }
                     };
-                    $this->map($methods, $pattern, $callable)->setName(('index' === $controller ? '' : $controller . '-').$name);
+                    if (isset($route['middleware'])){
+                        $r=$this->map($methods, $pattern, $callable)->setName(('index' === $controller ? '' : $controller . '-').$name);
+                        foreach ($route['middleware'] as $middleware){
+                            $r->add($container['routeMiddleware']($middleware));
+                        }
+                    }else{
+                        $this->map($methods, $pattern, $callable)->setName(('index' === $controller ? '' : $controller . '-').$name);
+                    }
                 }
             });
         }

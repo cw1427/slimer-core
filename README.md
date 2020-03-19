@@ -1,6 +1,7 @@
 # Slimer-core : Slimer framework basic core library
 
 ## Release history
+- v1.1.6 Add route middleware feature in route config.
 - v1.1.5 Add RbacPermissionNotFoundException catch in SideBarExtension::isMenuVisible function.
 - v1.1.4 Add jump to with parameter case support.
 - v1.1.3 Bug fix for intro feature would miss render when first login.

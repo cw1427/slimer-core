@@ -20,9 +20,9 @@ class NavBarExtension extends \Twig\Extension\AbstractExtension implements \Twig
     /**
      * @var container
      */
-    
+
     protected $container;
-    
+
     /**
      * @var
      */
@@ -30,8 +30,8 @@ class NavBarExtension extends \Twig\Extension\AbstractExtension implements \Twig
     {
         $this->container = $container;
     }
-    
-    
+
+
     /**
      * @return array
      */
@@ -65,61 +65,61 @@ class NavBarExtension extends \Twig\Extension\AbstractExtension implements \Twig
                 ),
         ];
     }
-    
+
     public function NotificationsFunction(\Twig_Environment $environment)
     {
         if (!$this->container->has('notices') || $this->container->get('notices') == null) {
             return "";
         }
-        
+
         return $environment->render('adminlte/navBar/notifications.html.twig', [
             'notifications' => $this->container['notices'],
             'total'         => sizeof($this->container['notices'])
         ]);
     }
-    
+
     public function TasksFunction(\Twig_Environment $environment)
     {
-        
-        if (!$this->container->has('notices') || $this->container->get('notices') == null) {
+
+        if (!$this->container->has('tasks') || $this->container->get('tasks') == null) {
             return "";
         }
-        
+
         return $environment->render('adminlte/navBar/tasks.html.twig', [
             'tasks' => $this->container['tasks'],
             'total' => sizeof($this->container['tasks'])
         ]);
     }
-    
+
     public function ActionsFunction(\Twig_Environment $environment)
     {
         if (!$this->container->has('actions') || $this->container->get('actions') == null) {
             return "";
         }
-        
+
         return $environment->render('adminlte/navBar/actions.html.twig', [
             'actions' => $this->container['actions'],
             'total'         => sizeof($this->container['actions'])
         ]);
     }
-    
+
     public function UserAccountFunction(\Twig_Environment $environment)
     {
         if ($this->container['session']->get('user') == null) {
             return "";
         }
-        
+
         return $environment->render('adminlte/navBar/user.html.twig', ['user' => $this->container['session']->get('user')]);
     }
-    
+
     public function AvatarFunction(\Twig_Environment $environment, $image, $alt = '', $class = 'img-circle')
     {
         if (!$image || !file_exists($image)) {
             $image = 'app/Static/img/avatar.png';
         }
-        
+
         $image = "data:image/png;base64," . base64_encode(file_get_contents($image));
-        
+
         return $environment
         ->createTemplate('<img src="{{ image }}" class="{{ class }}" alt="{{ alt }}"/>')
         ->render([
@@ -128,9 +128,9 @@ class NavBarExtension extends \Twig\Extension\AbstractExtension implements \Twig
             'alt'   => $alt,
         ]);
     }
-    
-    
-    
+
+
+
     /**
      * {@inheritdoc}
      */
