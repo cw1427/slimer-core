@@ -24,10 +24,18 @@ class ErrorHandler extends \Slimer\Controller
     {
         $this->logger->error($request->getUri()->__toString(), ['code' => 500, 'exception' => $e]);
         $message = $this->config('suit.settings.displayErrorDetails') ? $e->__toString() : $e->getMessage();
-        
+
         return $this->render('error/500.html', ['message' => $message], 500);
     }
-    
+
+    public function fatal500(Exception $e)
+    {
+        $this->logger->error("Internal fatal error", ['code' => 500, 'exception' => $e]);
+        $message = $this->config('suit.settings.displayErrorDetails') ? $e->__toString() : $e->getMessage();
+        //---- drop current response content
+        return $this->render('error/500.html', ['message' => $message], 500);
+    }
+
     /**
      * Handle not found error.
      *
@@ -39,10 +47,10 @@ class ErrorHandler extends \Slimer\Controller
     public function error404(ServerRequestInterface $request, ResponseInterface $response)
     {
         $this->logger->error($request->getUri()->__toString(), ['code' => 404]);
-        
+
         return $this->render('error/404.html', [], 404);
     }
-    
+
         /**
      * Handle permission error.
      *
@@ -53,7 +61,7 @@ class ErrorHandler extends \Slimer\Controller
      */
     public function error403(ServerRequestInterface $request, ResponseInterface $response)
     {
-        $this->logger->error($request->getUri()->__toString(), ['code' => 403, 'message' => "permission denied"]);        
+        $this->logger->error($request->getUri()->__toString(), ['code' => 403, 'message' => "permission denied"]);
         return $this->render('error/403.html', ['perm' => $request->getAttribute('perm')], 403);
     }
 }

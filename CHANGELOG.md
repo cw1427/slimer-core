@@ -1,3 +1,5 @@
+### 1.2.0 (2020-04-17)
+  -- Add fatal error handler for php5 to handle all of the php fatal exception that can't be catched.
 ### 1.1.6 (2020-03-19)
   -- Add route middleware feature.
 ### 1.1.5 (2020-02-20)
