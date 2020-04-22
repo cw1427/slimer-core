@@ -115,13 +115,13 @@ class NavBarExtension extends \Twig\Extension\AbstractExtension implements \Twig
     public function AvatarFunction(\Twig_Environment $environment, $image, $alt = '', $class = 'img-circle')
     {
         if (!$image || !file_exists($image)) {
-            $image = APP_ROOT . 'app/Static/img/avatar.png';
+            $image = 'app/Static/img/avatar.png';
         }
 
-        $image = "data:image/png;base64," . base64_encode(file_get_contents($image));
+        //$image = "data:image/png;base64," . base64_encode(file_get_contents($image));
 
         return $environment
-        ->createTemplate('<img src="{{ image }}" class="{{ class }}" alt="{{ alt }}"/>')
+        ->createTemplate('<img src="{{base_url()}}/{{ image }}" class="{{ class }}" alt="{{ alt }}"/>')
         ->render([
             'image' => $image,
             'class' => $class,
