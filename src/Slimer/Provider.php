@@ -86,7 +86,10 @@ class Provider implements ServiceProviderInterface
                     return false;
                 }
                 //----php5 convert those unthrowable error as the ErrorException.
-                throw new \ErrorException($errstr, 0, $errno, $errfile, $errline);
+                // It is too aggressive change to directly throw exception especially for some forgivable error
+                // instead change to records the error in log
+                $container['logger']->error("{$errstr} on {$errfile} at {$errline}");
+                //throw new \ErrorException($errstr, 0, $errno, $errfile, $errline);
 
             });
             //----regist php5 fatel error handler  if for php7 all of the errors are implement with Throwable can be catch by Slim as default
