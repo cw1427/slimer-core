@@ -20,9 +20,9 @@ class SideBarExtension extends \Twig\Extension\AbstractExtension implements \Twi
     /**
      * @var container
      */
-    
+
     protected $container;
-    
+
     /**
      * @var \Slim\Csrf\Guard
      */
@@ -30,8 +30,8 @@ class SideBarExtension extends \Twig\Extension\AbstractExtension implements \Twi
     {
         $this->container = $container;
     }
-    
-    
+
+
     /**
      * @return array
      */
@@ -83,16 +83,21 @@ class SideBarExtension extends \Twig\Extension\AbstractExtension implements \Twi
                 [$this, 'isMenuVisible'],
                 ['is_safe' => ['html'], 'needs_environment' => true]
                 ),
+            new \Twig_SimpleFunction(
+                'isNeedHint',
+                [$this, 'isNeedHint'],
+                ['is_safe' => ['html'], 'needs_environment' => true]
+                ),
         ];
     }
-    
+
     function getFilters()
     {
         return [
             new \Twig_SimpleFilter('render_empty', [$this, 'RenderEmpty'],['is_safe' => ['html'], 'needs_environment' => false]),
         ];
     }
-    
+
     public function RenderEmpty($value){
         if (isset($value) && ($value === '' || $value === ' ')){
             return "&nbsp";
@@ -100,17 +105,17 @@ class SideBarExtension extends \Twig\Extension\AbstractExtension implements \Twi
             return $value;
         }
     }
-    
-    
-    
+
+
+
     public function SidebarMenuFunction(\Twig_Environment $environment, ServerRequestInterface $request)
     {
-        
+
         /** @var SidebarMenuEvent $menuEvent */
         if ($this->container['session']->get('user') == null) return '';
         return $environment->render('adminlte/sidebar/menu.html.twig', ['menu' =>$this->container['config']('menu'),'request'=>$request]);
     }
-    
+
     public function SidebarCollapseFunction($session)
     {
         if ($session->get('sbs_adminlte_sidebar_collapse') === 'true') {
@@ -118,12 +123,12 @@ class SideBarExtension extends \Twig\Extension\AbstractExtension implements \Twi
         }
         return '';
     }
-    
+
     public function ToggleButtonFunction(\Twig_Environment $environment)
     {
         /** @var RoutingExtension $routing */
         $template = '<a href="#" class="sidebar-toggle" data-toggle="push-menu" {{menuToggleIntro|raw}}><span class="sr-only">Toggle navigation</span></a>';
-        
+
         try {
             $url = $this->container['router']->pathFor('sbs_adminlte_sidebar_collapse');
             return $environment
@@ -138,8 +143,8 @@ class SideBarExtension extends \Twig\Extension\AbstractExtension implements \Twi
             return $template;
         }
     }
-    
-    
+
+
     public function isSubMenuActive(\Twig_Environment $environment, $children, $current_route)
     {
         $isActive = false;
@@ -163,19 +168,19 @@ class SideBarExtension extends \Twig\Extension\AbstractExtension implements \Twi
         }
         return $isActive;
     }
-    
+
     public function getVersion()
     {
         $key=$this->container['config']('suit.version_key') ? $this->container['config']('suit.version_key') : "VERSION";
         return getenv($key) ?  getenv($key) : null;
     }
-    
+
     public function getCommitId()
     {
         $key=$this->container['config']('suit.commitid_key') ? $this->container['config']('suit.commitid_key') : "COMMITID";
         return getenv($key) ?  getenv($key) : null;
     }
-    
+
     public function isNeedIntro(\Twig_Environment $environment)
     {
         $currentUser = $this->container['session']->get('user');
@@ -186,7 +191,21 @@ class SideBarExtension extends \Twig\Extension\AbstractExtension implements \Twi
         }
         return false;
     }
-    
+
+    /*
+     * desc: function for new feature if need to hight light hint for intro
+     */
+    public function isNeedHint(\Twig_Environment $environment)
+    {
+        $currentUser = $this->container['session']->get('user');
+        if ($currentUser == null || $this->container['config']('suit.hint_date') == null ) return false;
+        if ($this->container['session']->get('hinted') !== null) return !$this->container['session']->get('hinted');
+        if ($currentUser['lastLogin'] !=null && (strtotime($currentUser['lastLogin'])<= strtotime($this->container['config']('suit.hint_date')))){
+            return true;
+        }
+        return false;
+    }
+
     public function getIntroduction(\Twig_Environment $environment, $introductionKey)
     {
         $introductions = $this->container['config']('suit.introductions');
@@ -197,8 +216,8 @@ class SideBarExtension extends \Twig\Extension\AbstractExtension implements \Twi
         }
         return implode(" ", $out);
     }
-    
-    
+
+
     public function isMenuVisible(\Twig_Environment $environment,$item)
     {
         $menuVisibleByPerm = $this->container['config']('suit.menu_visible_by_perm');
@@ -258,8 +277,8 @@ class SideBarExtension extends \Twig\Extension\AbstractExtension implements \Twi
             return true;
         }
     }
-    
-    
+
+
     /**
      * {@inheritdoc}
      */
