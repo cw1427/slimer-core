@@ -1,3 +1,5 @@
+### 1.2.4 (2021-07-12)
+  -- Bug fix for httpclient initializtion parameter overwrite bug.
 ### 1.2.1 (2020-04-22)
   -- Bug fix for NavBarExtension AvatarFunction.
 ### 1.2.0 (2020-04-17)

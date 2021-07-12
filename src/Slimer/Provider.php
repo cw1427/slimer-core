@@ -73,7 +73,7 @@ class Provider implements ServiceProviderInterface
             return new \mikehaertl\shellcommand\Command($command);
         });
         $container['httpClient'] = $container->protect(function ($configArray=[]) use ($container) {
-            $ca = \array_merge($configArray,['timeout'=>60,'verify'=>false]);
+            $ca = \array_merge(['timeout'=>60,'verify'=>false], $configArray);
             return new \GuzzleHttp\Client($ca);
         });
         if ('prod' === \getenv('APP_ENV')){

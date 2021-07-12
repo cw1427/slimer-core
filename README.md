@@ -1,6 +1,7 @@
 # Slimer-core : Slimer framework basic core library
 
 ## Release history
+- v1.2.4 fix bug for httpclient initial parameter overwrite bug.
 - v1.2.3 add isNeedHint twig template function.
 - v1.2.1 Bug fix for NavBarExtension AvatarFunction
 - v1.2.0 Add php5 fatal error exception handler.
