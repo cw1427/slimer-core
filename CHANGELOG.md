@@ -1,3 +1,5 @@
+### 1.2.5 (2022-03-23)
+  -- New feature. To add Auth middleware to pass req quary parameter to login to route.
 ### 1.2.4 (2021-07-12)
   -- Bug fix for httpclient initializtion parameter overwrite bug.
 ### 1.2.1 (2020-04-22)

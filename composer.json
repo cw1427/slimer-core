@@ -1,6 +1,6 @@
 {
     "name": "slimer/slimer-core",
-    "version": "1.2.4",
+    "version": "1.2.5",
     "description": "Slimer sketon framework fundamental library slimer-core",
     "keywords": ["slim", "slimer", "mvc"],
     "homepage": "https://github.com/cw1427/Slimer",
