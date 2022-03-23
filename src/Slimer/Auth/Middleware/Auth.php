@@ -34,13 +34,13 @@ class Auth extends Root
             }else{
                 return $this->notFoundHandler->__invoke($request, $response);
             }
-        }        
+        }
         if ($route->getName() == 'login') return $next($request, $response);
         //----check if has a valid session
         if ($this->container->has("basicAuth") || ($this->container->has('user') && $this->container->get('user'))){
             return $next($request, $response);
         }else{
-            $querys=  ($route->getArguments()!=null) ? \http_build_query($route->getArguments()) : null;
+            $querys=  \http_build_query(\array_merge($route->getArguments(),$request->getQueryParams()));
             return $this->response->withRedirect("/login?to={$route->getName()}&{$querys}");
         }
         
