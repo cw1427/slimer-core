@@ -28,8 +28,9 @@ class Auth extends Root
         //----by pass some unnecessary request
         $route = $request->getAttribute('route');
         //404 if route not found
-        if (!$route) {
-            if ($this->container->has("basicAuth")){
+        if (!isset($route)) {
+            $ct = $request->getContentType();
+            if ($this->container->has("basicAuth") || $ct == "application/json"){
                 return $this->response->withStatus(404)->withJson(['message'=>'The request url path is not found ' . $request->getUri()->getPath()]);
             }else{
                 return $this->notFoundHandler->__invoke($request, $response);

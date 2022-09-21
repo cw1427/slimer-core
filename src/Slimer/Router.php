@@ -20,6 +20,8 @@ class Router extends \Slimer\Root
      */
     public function __invoke(\Slim\App $app)
     {
+        // hold slim engine app instance in customer router
+        $this->app = $app;
         foreach ($this->config('routes') as $group => $routes) {
             //----support for route prefix by -  e.g.  api-cmd  the api is the route prefix
             if (\strpos($group,'-') > 0) {
